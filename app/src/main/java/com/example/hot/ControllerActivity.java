@@ -45,7 +45,7 @@ public class ControllerActivity extends AppCompatActivity{
     public IPicture.Listener listener;
     private URI mImageUri;
     private String MODEL_PATH = "/c/Users/gould/AndroidStudioProjects/Hot2/SeeFood/app/src/main/ml/hotdog.tflite";
-    private int INPUT_SIZE = 224;
+    private int INPUT_SIZE = 512;
     private HotDogClassifier classifier;
     private TextView result;
     Bitmap bitymap;
