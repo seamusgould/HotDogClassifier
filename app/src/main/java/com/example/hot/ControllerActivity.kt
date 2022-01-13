@@ -14,6 +14,7 @@ import com.example.hot.ControllerActivity
 import android.widget.Toast
 import android.app.Activity
 import android.content.ContentValues
+import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -22,18 +23,15 @@ import com.example.hot.ml.Hotdog
 import org.tensorflow.lite.support.image.TensorImage
 import java.io.IOException
 import java.net.URI
+import com.example.hot.ml.Hotdog.newInstance as newInstance1
 
 class ControllerActivity : AppCompatActivity() {
+
     private var imageView: ImageView? = null
     var mainactivity: MainActivity? = null
-    var listener: IPicture.Listener? = null
-    private val mImageUri: URI? = null
-    private val MODEL_PATH =
-        "/c/Users/gould/AndroidStudioProjects/Hot2/SeeFood/app/src/main/ml/hotdog.tflite"
-    private val INPUT_SIZE = 512
-    private val classifier: HotDogClassifier? = null
     private var result: TextView? = null
     var bitymap: Bitmap? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainactivity = MainActivity(this)
@@ -58,35 +56,30 @@ class ControllerActivity : AppCompatActivity() {
             REQUEST_CODE -> if (resultCode == RESULT_OK) {
                 Log.e(ContentValues.TAG, "into line 73")
                 val bundle = data!!.extras
-                val selectedImage = data.data
-                var bitmap: Bitmap
                 bitymap = bundle!!["data"] as Bitmap?
                 imageView!!.setImageBitmap(bitymap)
             } else if (resultCode == RESULT_CANCELED) {
                 Log.e(ContentValues.TAG, "Selecting picture cancelled")
             }
         }
-        try {
-            val model = Hotdog.newInstance(this.applicationContext)
-            // Creates inputs for reference.
-            val image = TensorImage.fromBitmap(bitymap)
-            // Runs model inference and gets result.
-            val outputs: Hotdog.Outputs = model.process(image)
-            Log.e(ContentValues.TAG, "Stuck on line 101")
-            val probability = outputs.probabilityAsCategoryList
-            Log.e(ContentValues.TAG, "Stuck on line 103")
-            // Releases model resources if no longer used.
-            model.close()
-            Log.e(ContentValues.TAG, "Stuck on line 106")
-            result!!.text = "The most obvious answer is " + probability[0]
-        } catch (e: IOException) {
-            // TODO Handle the exception
-        }
+        val context = ControllerActivity.appContext
+
+        val model = Hotdog.newInstance(context as Context)
+
+        // Creates inputs for reference.
+        val image = TensorImage.fromBitmap(bitymap)
+
+        // Runs model inference and gets result.
+        val outputs = model.process(image)
+        val probability = outputs.probabilityAsCategoryList
+
+        // Releases model resources if no longer used.
+        model.close()
     }
 
     companion object {
+        lateinit var appContext: Context
         private const val CAMERA_ACTION_CODE = 42
         private const val REQUEST_CODE = 42
-        private const val MY_CAMERA_PERMISSION_CODE = 42
     }
 }
