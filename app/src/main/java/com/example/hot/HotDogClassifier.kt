@@ -1,6 +1,5 @@
 package com.example.hot
 
-import com.example.hot.MainActivity
 import android.content.res.AssetManager
 import android.app.Activity
 import kotlin.Throws
@@ -11,7 +10,7 @@ import java.io.IOException
 import java.nio.MappedByteBuffer
 
 class HotDogClassifier(
-    activity: MainActivity?,
+    activity: MainView?,
     assetManager: AssetManager?,
     modelPath: String?,
     inputSize: Int
@@ -26,7 +25,7 @@ class HotDogClassifier(
         tfliteModel = FileUtil.loadMappedFile(activity!!.applicationContext, MODEL_PATH)
 
 // create tflite interpreter
-        val tfliteInterpreter = Interpreter(tfliteModel, tfliteOptions)
+        //val tfliteInterpreter = Interpreter(tfliteModel, tfliteOptions)
 
 /*// get model parameters (index tensor is 0 for a single image)
         DataType myImageDataType = tfliteInterpreter.getInputTensor(0).dataType();
