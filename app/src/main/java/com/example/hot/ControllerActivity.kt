@@ -9,45 +9,47 @@ import android.provider.MediaStore
 import android.widget.Toast
 import android.content.ContentValues
 import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import com.example.hot.databinding.ActivityMainBinding
 import com.example.hot.ml.Hotdog
 import org.tensorflow.lite.support.image.TensorImage
 
-class ControllerActivity : AppCompatActivity() {
+abstract class ControllerActivity : AppCompatActivity() {
 
+    var bundle: Bundle? = null
+    var binding: ActivityMainBinding? = null
     var imageView: ImageView? = null
-    var mainactivity: MainView? = null
     var result: TextView? = null
     var bitymap: Bitmap? = null
     var appContext: Context? = this
+    val amb: ActivityMainBinding? = null
+    var photoButton: Button? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainactivity = MainView(this)
-        setContentView(mainactivity!!.binding.root)
+        this.binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
+        this.imageView = amb?.imageView as ImageView
+        this.photoButton = amb?.button as Button
+        this.result = amb?.result as TextView
 
-    /*        photoButton.setOnClickListener {
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivityForResult(intent, Companion.CAMERA_ACTION_CODE)
-            } else {
-                Toast.makeText(this@ControllerActivity, "Oh Oh spagghettios", Toast.LENGTH_LONG)
-                    .show()
-            }
-        }*/
-    }
+        photoButton?.setOnClickListener {
+            var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            var packageManager: PackageManager = appContext!!.getPackageManager()
 
-    fun requestPhoto() {
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             if (intent.resolveActivity(packageManager) != null) {
                 startActivityForResult(intent, 42)
-            } else {
-                Toast.makeText(this, "Oh Oh spagghettios", Toast.LENGTH_LONG).show()
             }
+
+            onActivityResult(42, 42, intent)
+            Log.d("MainView", "line 50")
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -73,9 +75,9 @@ class ControllerActivity : AppCompatActivity() {
         // Releases model resources if no longer used.
         model.close()
     }
-
     companion object {
         const val CAMERA_ACTION_CODE = 42
         const val REQUEST_CODE = 42
+        const val RESULT_OK = 42
     }
 }
