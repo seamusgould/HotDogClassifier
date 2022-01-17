@@ -1,0 +1,184 @@
+[33mcommit b210b5532815319ebbe26298a0fd9f79e4fb09c3[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: seamusgould <sgould@vassar.edu>
+Date:   Sat Jan 15 20:53:15 2022 -0500
+
+    Added the image capture
+
+[1mdiff --git a/app/.idea/.gitignore b/app/.idea/.gitignore[m
+[1mnew file mode 100644[m
+[1mindex 0000000..26d3352[m
+[1m--- /dev/null[m
+[1m+++ b/app/.idea/.gitignore[m
+[36m@@ -0,0 +1,3 @@[m
+[32m+[m[32m# Default ignored files[m
+[32m+[m[32m/shelf/[m
+[32m+[m[32m/workspace.xml[m
+[1mdiff --git a/app/.idea/gradle.xml b/app/.idea/gradle.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..630989d[m
+[1m--- /dev/null[m
+[1m+++ b/app/.idea/gradle.xml[m
+[36m@@ -0,0 +1,13 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<project version="4">[m
+[32m+[m[32m  <component name="GradleSettings">[m
+[32m+[m[32m    <option name="linkedExternalProjectsSettings">[m
+[32m+[m[32m      <GradleProjectSettings>[m
+[32m+[m[32m        <option name="testRunner" value="GRADLE" />[m
+[32m+[m[32m        <option name="distributionType" value="DEFAULT_WRAPPED" />[m
+[32m+[m[32m        <option name="externalProjectPath" value="$PROJECT_DIR$" />[m
+[32m+[m[32m        <option name="resolveModulePerSourceSet" value="false" />[m
+[32m+[m[32m      </GradleProjectSettings>[m
+[32m+[m[32m    </option>[m
+[32m+[m[32m  </component>[m
+[32m+[m[32m</project>[m
+\ No newline at end of file[m
+[1mdiff --git a/app/.idea/misc.xml b/app/.idea/misc.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..46fefaa[m
+[1m--- /dev/null[m
+[1m+++ b/app/.idea/misc.xml[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<project version="4">[m
+[32m+[m[32m  <component name="ProjectRootManager" version="2" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">[m
+[32m+[m[32m    <output url="file://$PROJECT_DIR$/build/classes" />[m
+[32m+[m[32m  </component>[m
+[32m+[m[32m  <component name="ProjectType">[m
+[32m+[m[32m    <option name="id" value="Android" />[m
+[32m+[m[32m  </component>[m
+[32m+[m[32m</project>[m
+\ No newline at end of file[m
+[1mdiff --git a/app/.idea/modules.xml b/app/.idea/modules.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e1f9e1c[m
+[1m--- /dev/null[m
+[1m+++ b/app/.idea/modules.xml[m
+[36m@@ -0,0 +1,8 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<project version="4">[m
+[32m+[m[32m  <component name="ProjectModuleManager">[m
+[32m+[m[32m    <modules>[m
+[32m+[m[32m      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app.iml" />[m
+[32m+[m[32m    </modules>[m
+[32m+[m[32m  </component>[m
+[32m+[m[32m</project>[m
+\ No newline at end of file[m
+[1mdiff --git a/app/.idea/vcs.xml b/app/.idea/vcs.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..6c0b863[m
+[1m--- /dev/null[m
+[1m+++ b/app/.idea/vcs.xml[m
+[36m@@ -0,0 +1,6 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<project version="4">[m
+[32m+[m[32m  <component name="VcsDirectoryMappings">[m
+[32m+[m[32m    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />[m
+[32m+[m[32m  </component>[m
+[32m+[m[32m</project>[m
+\ No newline at end of file[m
+[1mdiff --git a/app/src/main/java/com/example/hot/ControllerActivity.kt b/app/src/main/java/com/example/hot/ControllerActivity.kt[m
+[1mindex de9901a..7d300c6 100644[m
+[1m--- a/app/src/main/java/com/example/hot/ControllerActivity.kt[m
+[1m+++ b/app/src/main/java/com/example/hot/ControllerActivity.kt[m
+[36m@@ -9,45 +9,47 @@[m [mimport android.provider.MediaStore[m
+ import android.widget.Toast[m
+ import android.content.ContentValues[m
+ import android.content.Context[m
+[32m+[m[32mimport android.content.pm.PackageManager[m
+ import android.util.Log[m
+ import android.view.View[m
+ import android.widget.Button[m
+ import android.widget.ImageView[m
+[32m+[m[32mimport com.example.hot.databinding.ActivityMainBinding[m
+ import com.example.hot.ml.Hotdog[m
+ import org.tensorflow.lite.support.image.TensorImage[m
+ [m
+[31m-class ControllerActivity : AppCompatActivity() {[m
+[32m+[m[32mabstract class ControllerActivity : AppCompatActivity() {[m
+ [m
+[32m+[m[32m    var bundle: Bundle? = null[m
+[32m+[m[32m    var binding: ActivityMainBinding? = null[m
+     var imageView: ImageView? = null[m
+[31m-    var mainactivity: MainView? = null[m
+     var result: TextView? = null[m
+     var bitymap: Bitmap? = null[m
+     var appContext: Context? = this[m
+[32m+[m[32m    val amb: ActivityMainBinding? = null[m
+[32m+[m[32m    var photoButton: Button? = null[m
+ [m
+ [m
+     override fun onCreate(savedInstanceState: Bundle?) {[m
+         super.onCreate(savedInstanceState)[m
+[31m-        mainactivity = MainView(this)[m
+[31m-        setContentView(mainactivity!!.binding.root)[m
+[32m+[m[32m        this.binding = ActivityMainBinding.inflate(layoutInflater)[m
+[32m+[m[32m        setContentView(binding?.root)[m
+[32m+[m[32m        this.imageView = amb?.imageView as ImageView[m
+[32m+[m[32m        this.photoButton = amb?.button as Button[m
+[32m+[m[32m        this.result = amb?.result as TextView[m
+ [m
+[31m-    /*        photoButton.setOnClickListener {[m
+[31m-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)[m
+[31m-            if (intent.resolveActivity(packageManager) != null) {[m
+[31m-                startActivityForResult(intent, Companion.CAMERA_ACTION_CODE)[m
+[31m-            } else {[m
+[31m-                Toast.makeText(this@ControllerActivity, "Oh Oh spagghettios", Toast.LENGTH_LONG)[m
+[31m-                    .show()[m
+[31m-            }[m
+[31m-        }*/[m
+[31m-    }[m
+[32m+[m[32m        photoButton?.setOnClickListener {[m
+[32m+[m[32m            var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)[m
+[32m+[m[32m            var packageManager: PackageManager = appContext!!.getPackageManager()[m
+ [m
+[31m-    fun requestPhoto() {[m
+[31m-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)[m
+             if (intent.resolveActivity(packageManager) != null) {[m
+                 startActivityForResult(intent, 42)[m
+[31m-            } else {[m
+[31m-                Toast.makeText(this, "Oh Oh spagghettios", Toast.LENGTH_LONG).show()[m
+             }[m
+[32m+[m
+[32m+[m[32m            onActivityResult(42, 42, intent)[m
+[32m+[m[32m            Log.d("MainView", "line 50")[m
+[32m+[m[32m        }[m
+[32m+[m
+     }[m
+ [m
+     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {[m
+[36m@@ -73,9 +75,9 @@[m [mclass ControllerActivity : AppCompatActivity() {[m
+         // Releases model resources if no longer used.[m
+         model.close()[m
+     }[m
+[31m-[m
+     companion object {[m
+         const val CAMERA_ACTION_CODE = 42[m
+         const val REQUEST_CODE = 42[m
+[32m+[m[32m        const val RESULT_OK = 42[m
+     }[m
+ }[m
+\ No newline at end of file[m
+[1mdiff --git a/app/src/main/java/com/example/hot/MainView.kt b/app/src/main/java/com/example/hot/MainView.kt[m
+[1mindex 92e7c18..062bbbb 100644[m
+[1m--- a/app/src/main/java/com/example/hot/MainView.kt[m
+[1m+++ b/app/src/main/java/com/example/hot/MainView.kt[m
+[36m@@ -1,41 +1,41 @@[m
+ package com.example.hot[m
+ [m
+[32m+[m[32mimport android.app.Activity.RESULT_CANCELED[m
+[32m+[m[32mimport android.app.PendingIntent.getActivity[m
+[32m+[m[32mimport android.content.ContentValues[m
+ import android.content.Intent[m
+[32m+[m[32mimport android.os.Bundle[m
+ import android.provider.MediaStore[m
+ import android.view.View[m
+ import android.widget.Button[m
+ import android.widget.ImageView[m
+ import android.widget.TextView[m
+ import android.widget.Toast[m
+[32m+[m[32mimport androidx.core.app.ActivityCompat.startActivityForResult[m
+ import com.example.hot.ControllerActivity[m
+ import com.example.hot.IPicture[m
+ import com.example.hot.databinding.ActivityMainBinding[m
+[32m+[m[32
