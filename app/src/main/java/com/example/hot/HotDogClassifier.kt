@@ -1,40 +1,31 @@
 package com.example.hot
 
-import android.content.res.AssetManager
-import android.app.Activity
-import kotlin.Throws
+import android.content.Context
 import android.graphics.Bitmap
-import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.support.common.FileUtil
-import java.io.IOException
-import java.nio.MappedByteBuffer
+import com.example.hot.ml.Hotdog
+import org.tensorflow.lite.support.image.TensorImage
 
-class HotDogClassifier(
-    activity: MainView?,
-    assetManager: AssetManager?,
-    modelPath: String?,
-    inputSize: Int
-) {
-    private val MODEL_PATH =
-        "/c/Users/gould/AndroidStudioProjects/Hot2/SeeFood/app/src/main/ml/hotdog.tflite"
-    var tfliteModel: MappedByteBuffer? = null
-    var activity: Activity? = null
-    @Throws(IOException::class)
-    fun recognizeHotDog(bitmap: Bitmap?): String {
-        val tfliteOptions = Interpreter.Options()
-        tfliteModel = FileUtil.loadMappedFile(activity!!.applicationContext, MODEL_PATH)
+class HotDogClassifier(context: Context?, bitmap:Bitmap) {
 
-// create tflite interpreter
-        //val tfliteInterpreter = Interpreter(tfliteModel, tfliteOptions)
+    var bitmap: Bitmap? = null
+    var context: Context? = null
 
-/*// get model parameters (index tensor is 0 for a single image)
-        DataType myImageDataType = tfliteInterpreter.getInputTensor(0).dataType();
-        myTensorImage = new TensorImage(myImageDataType);
+    init{
+        this.context = context
+        this.bitmap = bitmap
+    }
 
-// load bitmap
-        myTensorImage.load(myImage);
-
-// run inference
-        tfliteInterpreter.run(myTensorImage.getBuffer(), output);*/return "yas"
+    fun classify(): String? {
+        val model = Hotdog.newInstance(context as Context)
+        // Creates inputs for reference.
+        val image = TensorImage.fromBitmap(bitmap)
+        // Runs model inference and gets result.
+        val outputs = model.process(image)
+        val probability = outputs.probabilityAsCategoryList
+        // Releases model resources if no longer used.
+        model.close()
+        val prob = probability.elementAt(0).score
+//        var r = probability.contains("hot_dog")
+        return prob.toString();
     }
 }
