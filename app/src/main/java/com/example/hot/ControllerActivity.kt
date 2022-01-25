@@ -56,21 +56,37 @@ class ControllerActivity : AppCompatActivity() {
 
         var classifier = HotDogClassifier(appContext, bitymap!!)
 
-        val res = classifier.classify()
+        val res = classifier.classify() as Int
 
-        result!!.text = res
+        if (res >= .95){
+            displayHotDog()
+        }
+        if (res <= .95 && res >= .05){
+            displayUncertain();
+        }
 
-    //
-//        Check to see which probability comes up.  Depending on the output, make it so that different
-//        popups will show up.
-//        if (a < b){
-//
-//        }
+        if (res <= .05){
+            displayNotHogDog()
+        }
 
+        result!!.text = res.toString()
+
+
+    }
+
+    private fun displayNotHogDog() {
+        TODO("Not yet implemented")
+    }
+
+    private fun displayUncertain(): Any {
+        TODO("Not yet implemented")
+    }
+
+    private fun displayHotDog() {
+        TODO("Not yet implemented")
     }
 
     companion object {
         const val REQUEST_CODE = 42
-        const val RESULT_OK = 42
     }
 }

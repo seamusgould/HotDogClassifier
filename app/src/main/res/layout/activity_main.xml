@@ -60,7 +60,7 @@
         android:id="@+id/imageView"
         android:layout_width="386dp"
         android:layout_height="481dp"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/lasagna"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
