@@ -25,9 +25,6 @@ class ControllerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-
-        // use a custom factory so we can pass in the controller upon fragment reconstruction
-        // must be called prior to call to super.onCreate()
         super.onCreate(savedInstanceState)
         this.binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
@@ -52,22 +49,20 @@ class ControllerActivity : AppCompatActivity() {
         imageView!!.setImageBitmap(bitymap)
         Log.d("ControllerActivity", "Line 61")
 
-        val context = appContext
-
         var classifier = HotDogClassifier(appContext, bitymap!!)
 
-        val res = classifier.classify() as Int
+        var res = classifier.classify()// as Int
 
-        if (res >= .95){
-            displayHotDog()
-        }
-        if (res <= .95 && res >= .05){
-            displayUncertain();
-        }
-
-        if (res <= .05){
-            displayNotHogDog()
-        }
+//        if (res >= .95){
+//            displayHotDog()
+//        }
+//        if (res <= .95 && res >= .05){
+//            displayUncertain();
+//        }
+//
+//        if (res <= .05){
+//            displayNotHogDog()
+//        }
 
         result!!.text = res.toString()
 
