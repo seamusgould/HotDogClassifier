@@ -43,6 +43,10 @@ android {
     }
 }
 
+task wrapper(type: Wrapper){
+    gradleVersion = '7.2'
+}
+
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
@@ -55,6 +59,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.core:core-ktx:1.0.2"
 }
 /*
 repositories {

@@ -3,6 +3,7 @@ package com.example.hot
 import android.content.Context
 import android.graphics.Bitmap
 import com.example.hot.ml.Hotdog
+import com.example.hot.ml.Model
 import org.tensorflow.lite.support.image.TensorImage
 
 class HotDogClassifier(context: Context?, bitmap:Bitmap) {
