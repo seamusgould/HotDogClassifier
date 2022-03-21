@@ -16,6 +16,10 @@ import com.example.hot.databinding.ActivityMainBinding
 import com.example.hot.ml.Model
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import java.nio.ByteBuffer
+import android.os.SystemClock
+import java.io.ByteArrayOutputStream
+
 
 class ControllerActivity : AppCompatActivity() {
 
@@ -56,18 +60,25 @@ class ControllerActivity : AppCompatActivity() {
         imageView!!.setImageBitmap(bitymap)
         Log.d("ControllerActivity", "Line 61")
 
-//        val model = Model.newInstance(appContext!!)
-//
-//// Creates inputs for reference.
-//        val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 128, 128, 3), DataType.FLOAT32)
-//        inputFeature0.loadBuffer(bitymap!!)
-//
-//// Runs model inference and gets result.
-//        val outputs = model.process(inputFeature0)
-//        val outputFeature0 = outputs.outputFeature0AsTensorBuffer
-//
-//// Releases model resources if no longer used.
-//        model.close()
+        var model = Model.newInstance(appContext!!)
+
+        Log.d("ControllerActivity", "Line 61")
+
+        // https://www.youtube.com/watch?v=RJjiCwKAR8w - watched it
+
+        val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 128, 128, 3), DataType.FLOAT32)
+
+        var byteBuffer : ByteBuffer = ByteBuffer.allocateDirect(4*4)
+        byteBuffer[0] =
+
+        inputFeature0.loadBuffer(byteBuffer)
+
+// Runs model inference and gets result.
+        val outputs = model.process(inputFeature0)
+        val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+
+// Releases model resources if no longer used.
+        model.close()
 
 
         var classifier = HotDogClassifier(appContext, bitymap!!)
@@ -111,4 +122,3 @@ class ControllerActivity : AppCompatActivity() {
         const val REQUEST_CODE = 42
     }
 }
-
