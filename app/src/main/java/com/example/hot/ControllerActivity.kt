@@ -64,22 +64,6 @@ class ControllerActivity : AppCompatActivity() {
 
         Log.d("ControllerActivity", "Line 61")
 
-        // https://www.youtube.com/watch?v=RJjiCwKAR8w - watched it
-
-        val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 128, 128, 3), DataType.FLOAT32)
-
-        var byteBuffer : ByteBuffer = ByteBuffer.allocateDirect(4*4)
-        byteBuffer[0] =
-
-        inputFeature0.loadBuffer(byteBuffer)
-
-// Runs model inference and gets result.
-        val outputs = model.process(inputFeature0)
-        val outputFeature0 = outputs.outputFeature0AsTensorBuffer
-
-// Releases model resources if no longer used.
-        model.close()
-
 
         var classifier = HotDogClassifier(appContext, bitymap!!)
 
@@ -89,14 +73,14 @@ class ControllerActivity : AppCompatActivity() {
 
 
 
-        if (int!! > .8){
+        if (outputFeature0!! > .8){
             displayHotDog()
         }
-        if (int!! <= .8 && int >= .3){
-            displayUncertain();
+        if (outputFeature0!! <= .8 && outputFeature0 >= .3){
+            displayUncertain()
         }
 
-        if (int!! < .3){
+        if (outputFeature0!! < .3){
             displayNotHogDog()
         }
 
