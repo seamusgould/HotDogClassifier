@@ -69,9 +69,7 @@ class ControllerActivity : AppCompatActivity() {
 
         var res = classifier.classify() //this is a string?
 
-        val int = res?.toDouble()
-
-
+        val outputFeature0 = res?.toDouble()
 
         if (outputFeature0!! > .8){
             displayHotDog()
