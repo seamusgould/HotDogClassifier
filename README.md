@@ -4,7 +4,7 @@ The shazam for food.
 
 ## Implementation
 
-This app is loosely based on Silicon Valley's [![SeeFood]](https://www.youtube.com/watch?v=vIci3C4JkL0)
+This app is loosely based on Silicon Valley's [SeeFood](https://www.youtube.com/watch?v=vIci3C4JkL0)
 
 - I trained a neural network using Keras and Tensorflow to export it as a tensorflow lite model.
 - Conducted hyperparameter tuning using Weights and Biases.
@@ -16,3 +16,4 @@ a hierarchical softmax loss (only if the number of categories exceeds thousands.
 
 Here is a video implementation:
 
+![example](https://github.com/seamusgould/HotDogClassifier/blob/main/hotdog.gif?raw=true)
